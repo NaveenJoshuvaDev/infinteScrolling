@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>XMLHttpRequest Example</title>
 </head>
 <body>
-    <h1>Hello</h1>
-    <div id="main"></div>
+   
+    <div id="main">Content will be loaded here...</div>
+
     <script>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "script.php", true);
