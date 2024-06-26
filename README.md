@@ -264,3 +264,91 @@ The main differences between a JSON string and a JavaScript object lie in their 
 4. **Syntax**: JSON strings require keys to be enclosed in double quotes (`""`), while JavaScript object keys can be unquoted if they are valid identifiers.
 
 Understanding these differences helps in effectively using JSON for data exchange and JavaScript objects for manipulating data within JavaScript applications.
+
+### Ready States
+
+When we click request the response is just doesn't happened on the go its step by step.
+
+- 0: Connection created but not opened
+- 1: Connection opened
+- 2: Request sent, received by server
+- 3: Response in progress(partial data)
+- 4: Response complete (success or failure)
+
+XMLHttpRequest object has a nethod onreadystatechange
+
+- Used to store a Javascript function
+- Called each time readyState changes
+- Prevents having to constantly recheck value
+
+```
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "script.php", true);
+ahr.onreadystatechange = function() {
+  if(xhr.readyState == 4 && xhr.status == 200){
+   var target = document.getElementById("main");
+   target.innerHTML = json.last_name;
+  }
+}
+
+xhr.send();
+
+```
+
+**Example for Ready States**
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main">
+        This is the original text when the page first loads.
+    </div>
+    <button id="ajax-button" type="button">Update content with Ajax</button>
+    <script>
+        function replaceText(){
+            var target =document.getElementById("main");
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'new_content.txt', true);
+            xhr.onreadystatechange = function () {
+                console.log('readyState: ' + xhr.readyState);
+                if(xhr.readyState == 2) {
+                    target.innerHTML = 'Loading...';
+                     console.log( target.innerHTML = 'Loading...');
+
+                }
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    setTimeout(function () {
+                        target.innerHTML = xhr.responseText;
+                }, 5000);
+
+                }
+            }
+            xhr.send();
+        }
+
+        var button = document.getElementById("ajax-button");
+        button.addEventListener("click", replaceText);
+    </script>
+</body>
+</html>
+
+
+
+```
+
+```
+new_content.txt
+Hello world is here
+
+
+```
+
+###
+
+Load Remote JSON

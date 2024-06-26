@@ -6,28 +6,34 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello</h1>
-    <div id="main"></div>
+    <div id="main">
+        This is the original text when the page first loads.
+    </div>
+    <button id="ajax-button" type="button">Update content with Ajax</button>
     <script>
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "script.php", true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var text = xhr.responseText;
-                    var xml = xhr.responseXML;
-
-                    var target = document.getElementById("main");
-                    target.innerHTML = text;
-                    console.log(text);
-                } else {
-                    console.error("Failed to fetch data. Status: " + xhr.status);
+        function replaceText(){
+            var target =document.getElementById("main");
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'new_content.txt', true);
+            xhr.onreadystatechange = function () {
+                console.log('readyState: ' + xhr.readyState);
+                if(xhr.readyState == 2) {
+                    target.innerHTML = 'Loading...';
+                     console.log( target.innerHTML = 'Loading...');
+                   
+                }
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    setTimeout(function () {
+                        target.innerHTML = xhr.responseText;
+                }, 5000); 
+                  
                 }
             }
-        };
+            xhr.send();
+        }
 
-        xhr.send();
+        var button = document.getElementById("ajax-button");
+        button.addEventListener("click", replaceText);
     </script>
 </body>
 </html>
