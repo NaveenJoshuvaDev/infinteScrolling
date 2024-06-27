@@ -3,37 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ajax zip Code</title>
+    <style>
+
+    #entry {
+      margin: 2em 1em;
+    }
+    #location {
+        margin: 1em;
+    }
+    </style>
 </head>
 <body>
-    <div id="main">
-        This is the original text when the page first loads.
+    <div id="entry">
+        Zip code: <input id="zipcode" type="text" name="zipcode">
+        <button id="ajax-button" type="button">Submit</button>
+
     </div>
-    <button id="ajax-button" type="button">Update content with Ajax</button>
+    <div id="location">
+
+    </div>
     <script>
-        function replaceText(){
-            var target =document.getElementById("main");
+        var api='https://maps.googleapis.com/maps/api/geocode/json';
+
+        function findLocation()
+        {
+            var zipcode = document.getElementById('zipcode');
+            var url = api + '?address=' + zipcode.value;
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'new_content.txt', true);
+            xhr.open('GET', url, true);
             xhr.onreadystatechange = function () {
-                console.log('readyState: ' + xhr.readyState);
-                if(xhr.readyState == 2) {
-                    target.innerHTML = 'Loading...';
-                     console.log( target.innerHTML = 'Loading...');
-                   
+                if(xhr.readyState < 4)
+                {
+                    showLoading();
                 }
                 if(xhr.readyState == 4 && xhr.status == 200){
-                    setTimeout(function () {
-                        target.innerHTML = xhr.responseText;
-                }, 5000); 
-                  
+                    outputLocation(xhr.responseText);
                 }
-            }
+            };
             xhr.send();
         }
-
+        function showLoading()
+        {
+            var target = document.getElementById('location');
+            target.innerHTML = 'Loading....';
+        }
+        function outputLocation(data){
+            var target = document.getElementById('location');
+            var json = JSON.parse(data);
+            var address = json.results[0].formatted_address;
+            target.innerHTML = address;
+        }
         var button = document.getElementById("ajax-button");
-        button.addEventListener("click", replaceText);
+        button.addEventListener("click", findLocation);
     </script>
 </body>
 </html>
