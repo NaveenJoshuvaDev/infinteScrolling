@@ -420,3 +420,36 @@ Hello world is here
 
 
 ```
+
+### Using Jquery
+
+
+### Detect Ajax Request
+
+How to find it?
+- Page assumes request was Ajax.
+- Page detects if request was Ajax.
+- Handle regular and Ajax requests differently.
+- Regular and ajax request looks the same with server but we can detect using request header.
+- using Request Header: X-Requested-With
+```
+//JavaScript
+
+xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+//Php will accept this using server variables
+function is_ajax_request()
+{
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH'] && 
+    $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
+}
+if(is_ajax_request())
+{
+    echo "Ajax response";
+}
+else
+{
+    echo "Non-Ajax response";
+}
+
+```
+- But Jquery Does this automatically
